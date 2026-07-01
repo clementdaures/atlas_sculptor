@@ -59,5 +59,5 @@ You are free to use, modify, and distribute this software under the terms of the
 
 See the full license text here: https://www.gnu.org/licenses/gpl-3.0.html
 
-📌 Notes
+## Notes
 Please ensure proper environment setup (Python 3.11, PySide6, Maya 2025) before running the tool initialization scripts within the Andhakara asset pipeline.
