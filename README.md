@@ -1,5 +1,5 @@
 # ATLAS SCULPTOR - ANDHAKARA
-Pipeline repository for the animated short film Andhakara
+**Pipeline repository for the animated short film Andhakara**
 
 ## Version
 1.00 — 04/09/25
