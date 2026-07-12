@@ -1,28 +1,35 @@
 # -*- coding: utf-8 -*-
 """
-Frame editing (enter/exit sculpt-target edit mode) for the Atlas Shot Sculptor tool.
+Per-layer sculpt edit-mode entry/exit for the Atlas Shot Sculptor tool.
 
 Author: Clement Daures
 Website: clementdaures.com
 """
 
+from __future__ import annotations
+
 import maya.cmds as cmds
 
-from .node import find_shot_sculpt_node
+from .layers import get_layer_frame_time
+from .node import find_shot_sculpt_node_for_mesh
 
 
-def enter_edit_mode(frame_index: int) -> None:
-    """Put Maya into sculpt-target edit mode for the given frame index.
+def enter_edit_mode(mesh: str, layer_index: int) -> None:
+    """Put Maya into sculpt-target edit mode for the given layer.
 
-    Sets the timeline to the stored frame time, forces the blendShape weight to
-    1.0, activates ``sculptTarget``, and switches to the Sculpt Mesh tool.
+    Sets the timeline to the layer's stored frame time, forces the blendShape
+    weight to 1.0, activates ``sculptTarget``, and switches to the Sculpt
+    Mesh tool. This deliberately selects the managed meshes -- that is the
+    point of entering edit mode -- so, unlike most functions in this
+    package, it does *not* restore the prior selection.
 
     Args:
-        frame_index (int): Multi-attribute index of the frame to edit.
+        mesh (str): Any mesh managed by the target node.
+        layer_index (int): Layer/target index to edit.
     """
-    node = find_shot_sculpt_node()
+    node = find_shot_sculpt_node_for_mesh(mesh)
     if not node:
-        cmds.error("No Atlas Sculptor node in the scene.")
+        cmds.error("No Atlas Sculptor node found for this object.")
         return
 
     bs_list = cmds.listConnections(f"{node}.blendShapes", source=True, destination=False) or []
@@ -30,7 +37,10 @@ def enter_edit_mode(frame_index: int) -> None:
         cmds.error("Atlas Sculptor node has no mesh data.")
         return
 
-    frame_time = cmds.getAttr(f"{node}.frameList[{frame_index}]")
+    frame_time = get_layer_frame_time(mesh, layer_index)
+    if frame_time is None:
+        cmds.error(f"Unknown layer index {layer_index}.")
+        return
     cmds.currentTime(frame_time)
 
     mesh_bs_indices = cmds.getAttr(f"{node}.origMeshes", multiIndices=True) or []
@@ -44,11 +54,11 @@ def enter_edit_mode(frame_index: int) -> None:
         ) or []
         if not mesh_conns or not bs_conns:
             continue
-        mesh = mesh_conns[0]
-        bs   = bs_conns[0]
-        meshes_to_select.append(mesh)
+        m  = mesh_conns[0]
+        bs = bs_conns[0]
+        meshes_to_select.append(m)
 
-        attr = f"{bs}.weight[{frame_index}]"
+        attr = f"{bs}.weight[{layer_index}]"
         if cmds.objExists(attr):
             cmds.setAttr(attr, 1.0)
 
@@ -56,7 +66,7 @@ def enter_edit_mode(frame_index: int) -> None:
         cmds.select(meshes_to_select, replace=True)
 
     if bs_list:
-        cmds.sculptTarget(bs_list[0], edit=True, target=frame_index)
+        cmds.sculptTarget(bs_list[0], edit=True, target=layer_index)
 
     try:
         cmds.setToolTo("SculptMeshTool")
@@ -64,13 +74,14 @@ def enter_edit_mode(frame_index: int) -> None:
         pass
 
 
-def exit_edit_mode(frame_index: int) -> None:
-    """Exit sculpt-target edit mode for the given frame index.
+def exit_edit_mode(mesh: str, layer_index: int) -> None:
+    """Exit sculpt-target edit mode for the given layer.
 
     Args:
-        frame_index (int): Multi-attribute index of the frame being finished.
+        mesh (str): Any mesh managed by the target node.
+        layer_index (int): Layer/target index being finished.
     """
-    node = find_shot_sculpt_node()
+    node = find_shot_sculpt_node_for_mesh(mesh)
     if not node:
         return
 
