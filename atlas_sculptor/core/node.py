@@ -42,6 +42,19 @@ def find_shot_sculpt_node_for_mesh(mesh: str) -> str | None:
     return None
 
 
+def find_all_shot_sculptor_nodes() -> list[str]:
+    """Find every AtlasShotSculptor node in the scene, regardless of selection.
+
+    Returns:
+        list[str]: Names of every network node carrying the
+            ``is_shot_sculptor_node`` marker attribute.
+    """
+    return [
+        node for node in (cmds.ls(type="network") or [])
+        if cmds.attributeQuery("is_shot_sculptor_node", node=node, exists=True)
+    ]
+
+
 def mesh_has_shot_sculptor_node(mesh: str) -> bool:
     """Return whether *mesh* is already connected to its own AtlasShotSculptor node.
 
@@ -115,22 +128,22 @@ def create_shot_sculpt_node() -> str | None:
     return node
 
 
-def delete_shot_sculptor_node(mesh: str) -> None:
-    """Delete the AtlasShotSculptor node managing *mesh*, its blendShapes,
-    and all connections.
+def _delete_node(node: str, delete_blendshapes: bool) -> None:
+    """Delete one AtlasShotSculptor node, its connections, and optionally its blendShapes.
 
-    The node's layer bookkeeping (stored on the node itself, see
-    :mod:`.config`) is deleted for free along with the node -- there is no
-    separate JSON file to clean up.
+    Shared implementation behind :func:`delete_shot_sculptor_node` and
+    :func:`delete_all_shot_sculptor_nodes`.
 
     Args:
-        mesh (str): Any mesh managed by the node to delete.
+        node (str): AtlasShotSculptor network node name to delete.
+        delete_blendshapes (bool): If ``True``, every blendShape deformer
+            wired to this node is deleted along with it (the sculpted
+            layers on the mesh are lost). If ``False``, the blendShape
+            deformers are left in place on the mesh -- only the Atlas
+            Sculptor bookkeeping (the network node and its layer data) is
+            removed, and the sculpted shape stays exactly as it currently
+            reads, no longer tracked as layers.
     """
-    node = find_shot_sculpt_node_for_mesh(mesh)
-    if not node:
-        cmds.warning("No Shot Sculptor node found for this object.")
-        return
-
     for i in cmds.getAttr(f"{node}.origMeshes", multiIndices=True) or []:
         conns = cmds.listConnections(
             f"{node}.origMeshes[{i}]", source=True, destination=False, plugs=True
@@ -151,7 +164,7 @@ def delete_shot_sculptor_node(mesh: str) -> None:
                 cmds.disconnectAttr(conns[0], f"{node}.blendShapes[{i}]")
             except Exception as exc:
                 cmds.warning(f"Failed to disconnect blendShape[{i}]: {exc}")
-            if cmds.objExists(bs_node) and cmds.nodeType(bs_node) == "blendShape":
+            if delete_blendshapes and cmds.objExists(bs_node) and cmds.nodeType(bs_node) == "blendShape":
                 try:
                     cmds.delete(bs_node)
                 except Exception as exc:
@@ -161,3 +174,47 @@ def delete_shot_sculptor_node(mesh: str) -> None:
         cmds.delete(node)
     except Exception as exc:
         cmds.warning(f"Failed to delete AtlasShotSculptor node: {exc}")
+
+
+def delete_shot_sculptor_node(mesh: str, delete_blendshapes: bool = True) -> None:
+    """Delete the AtlasShotSculptor node managing *mesh* and all its connections.
+
+    The node's layer bookkeeping (stored on the node itself, see
+    :mod:`.config`) is deleted for free along with the node -- there is no
+    separate JSON file to clean up.
+
+    Args:
+        mesh (str): Any mesh managed by the node to delete.
+        delete_blendshapes (bool): Whether to also delete the blendShape
+            deformers this node created. Defaults to ``True`` for backward
+            compatibility with existing call sites; the UI should prompt
+            the user (see ``atlas_sculptor.ui.delete_dialog``) and pass
+            their choice explicitly.
+    """
+    node = find_shot_sculpt_node_for_mesh(mesh)
+    if not node:
+        cmds.warning("No Shot Sculptor node found for this object.")
+        return
+    _delete_node(node, delete_blendshapes)
+
+
+def delete_all_shot_sculptor_nodes(delete_blendshapes: bool = True) -> int:
+    """Delete every AtlasShotSculptor node in the scene.
+
+    Args:
+        delete_blendshapes (bool): Whether to also delete every blendShape
+            deformer created by these nodes. See :func:`delete_shot_sculptor_node`.
+
+    Returns:
+        int: How many nodes were deleted.
+    """
+    nodes = find_all_shot_sculptor_nodes()
+    if not nodes:
+        cmds.warning("No Shot Sculptor nodes found in the scene.")
+        return 0
+
+    for node in nodes:
+        if cmds.objExists(node):
+            _delete_node(node, delete_blendshapes)
+
+    return len(nodes)
