@@ -8,7 +8,7 @@ Website: clementdaures.com
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import QDoubleValidator
 
-from atlas_sculptor.ui.main import AtlasShotSculptorUi
+from atlas_sculptor.ui.window import AtlasShotSculptorUi
 
 def _delete_existing(object_name: str):
     """

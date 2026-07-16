@@ -18,9 +18,10 @@ import maya.cmds as cmds
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QListWidgetItem
 
-from atlas_sculptor.core import frames, layers
+from atlas_sculptor.core import frames
+from atlas_sculptor.core.models import layers
 
-from .widgets import LayerRowWidget
+from atlas_sculptor.ui.widgets import LayerRowWidget
 
 
 class FramePanelMixin:

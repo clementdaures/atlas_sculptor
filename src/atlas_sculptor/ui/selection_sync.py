@@ -16,9 +16,9 @@ from contextlib import contextmanager
 
 import maya.cmds as cmds
 
-from atlas_sculptor.core import node, selection
 
-from .constants import PAGE_FRAME_DISPLAYER, PAGE_INITIALIZE
+from atlas_sculptor.ui.constants import PAGE_FRAME_DISPLAYER, PAGE_INITIALIZE
+from atlas_sculptor.core import node, selection
 
 
 class SelectionSyncMixin:

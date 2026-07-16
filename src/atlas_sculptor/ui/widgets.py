@@ -11,8 +11,7 @@ from __future__ import annotations
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QCheckBox, QToolButton
 from PySide6.QtCore import Signal
 
-from . import styles
-
+from atlas_sculptor.ui.resources import stylesheet
 
 class EditableLabel(QWidget):
     """A label that turns into an inline QLineEdit on double-click."""
@@ -130,6 +129,6 @@ class LayerRowWidget(QWidget):
         self._edit_btn.setChecked(is_editing)
         self._edit_btn.setFixedSize(20, 20)
         self._edit_btn.setToolTip("Enter/finish sculpt edit mode for this layer")
-        self._edit_btn.setStyleSheet(styles.edit_toggle_button_style())
+        self._edit_btn.setStyleSheet(stylesheet.edit_toggle_button_style())
         self._edit_btn.clicked.connect(self.edit_clicked.emit)
         row.addWidget(self._edit_btn)

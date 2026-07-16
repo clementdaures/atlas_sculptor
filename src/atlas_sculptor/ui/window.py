@@ -26,11 +26,11 @@ import maya.cmds as cmds
 
 from atlas_sculptor.core import node
 
-from . import styles
-from .delete_dialog import DeleteNodeDialog
-from .edit_controller import EditControllerMixin
-from .frame_panel import FramePanelMixin
-from .selection_sync import SelectionSyncMixin
+from atlas_sculptor.ui.resources import stylesheet
+from atlas_sculptor.ui.delete_dialog import DeleteNodeDialog
+from atlas_sculptor.ui.edit_controller import EditControllerMixin
+from atlas_sculptor.ui.frame_panel import FramePanelMixin
+from atlas_sculptor.ui.selection_sync import SelectionSyncMixin
 
 
 

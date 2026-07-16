@@ -15,9 +15,10 @@ from __future__ import annotations
 
 import maya.cmds as cmds
 
-from .config import load_layer_data
-from .layers import add_layer_to_frame, delete_layer, get_layer_entries
-from .node import find_shot_sculpt_node_for_mesh
+# atlas_sculptor/core/...
+from atlas_sculptor.core.config import load_layer_data
+from atlas_sculptor.core.models.layers import add_layer_to_frame, delete_layer, get_layer_entries
+from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
 
 
 def get_frame_entries(mesh: str) -> list[tuple[int, str]]:

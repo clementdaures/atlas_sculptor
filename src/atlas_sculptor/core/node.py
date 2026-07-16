@@ -15,8 +15,9 @@ from __future__ import annotations
 
 import maya.cmds as cmds
 
-from .config import ensure_layer_data_attr
-from .selection import get_selected_meshes, restore_selection
+# atlas_sculptor/core/...
+from atlas_sculptor.core.config import ensure_layer_data_attr
+from atlas_sculptor.core.selection import get_selected_meshes, restore_selection
 
 
 def find_shot_sculpt_node_for_mesh(mesh: str) -> str | None:

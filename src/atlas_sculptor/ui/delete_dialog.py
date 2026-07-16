@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QPushButton,
 )
 
-from . import styles
+from atlas_sculptor.ui.resources import stylesheet
 
 
 class DeleteNodeDialog(QDialog):
@@ -30,7 +30,7 @@ class DeleteNodeDialog(QDialog):
         self.setWindowTitle("Delete Shot Sculptor Node")
         self.setModal(True)
         self.setMinimumWidth(340)
-        self.setStyleSheet(styles.main_stylesheet())
+        self.setStyleSheet(stylesheet.main_stylesheet())
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -56,7 +56,7 @@ class DeleteNodeDialog(QDialog):
         btn_row.addWidget(cancel_btn)
 
         delete_btn = QPushButton("Delete")
-        delete_btn.setStyleSheet(styles.red_action_button_style())
+        delete_btn.setStyleSheet(stylesheet.red_action_button_style())
         delete_btn.clicked.connect(self.accept)
         btn_row.addWidget(delete_btn)
 
