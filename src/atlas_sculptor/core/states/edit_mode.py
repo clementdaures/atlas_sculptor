@@ -10,8 +10,10 @@ from __future__ import annotations
 
 import maya.cmds as cmds
 
-from .layers import get_layer_frame_time
-from .node import find_shot_sculpt_node_for_mesh
+# atlas_sculptor/core/...
+
+from atlas_sculptor.core.models.layers import get_layer_frame_time
+from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
 
 
 def enter_edit_mode(mesh: str, layer_index: int) -> None:
