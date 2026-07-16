@@ -23,15 +23,18 @@ from __future__ import annotations
 
 import maya.cmds as cmds
 
-from .config import (
+# atlas_sculptor/core/...
+
+from atlas_sculptor.core.config import (
     DEFAULT_LAYER_SETTINGS,
     load_layer_data,
     save_layer_data,
     next_layer_index,
     next_order,
 )
-from .node import find_shot_sculpt_node_for_mesh
-from .selection import restore_selection
+
+from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
+from atlas_sculptor.core.selection import restore_selection
 
 
 # ---------------------------------------------------------------------------
