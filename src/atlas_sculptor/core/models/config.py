@@ -19,13 +19,20 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
-from __future__ import annotations
+# region Imports & Config
 
+# python module
+from __future__ import annotations
 import json
 
+# dcc import
 import maya.cmds as cmds
 
+#endregion
 
+# ==========
+
+# region Constants
 LAYER_DATA_ATTR = "layerData"
 
 DEFAULT_LAYER_SETTINGS = {
@@ -35,8 +42,11 @@ DEFAULT_LAYER_SETTINGS = {
     "hold_out": 0,
     "key_type": "linear",
 }
+# endregion
 
+# ==========
 
+# region Config Logic
 def ensure_layer_data_attr(node: str) -> None:
     """Add the ``layerData`` string attribute to *node* if it isn't there yet.
 
@@ -127,3 +137,4 @@ def next_order(frame_time: int, data: dict) -> int:
         if info.get("frame_time") == frame_time and not info.get("is_base")
     ]
     return (max(existing) + 1) if existing else 0
+#endregion

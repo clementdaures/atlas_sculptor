@@ -19,27 +19,30 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
 # atlas_sculptor/core/...
-
-from atlas_sculptor.core.config import (
+from atlas_sculptor.core.models.config import (
     DEFAULT_LAYER_SETTINGS,
     load_layer_data,
     save_layer_data,
     next_layer_index,
     next_order,
 )
+from atlas_sculptor.core.scene.node import find_shot_sculpt_node_for_mesh
+from atlas_sculptor.core.scene.selection import restore_selection
 
-from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
-from atlas_sculptor.core.selection import restore_selection
+#endregion
 
+# ==========
 
-# ---------------------------------------------------------------------------
-# Data accessors
-# ---------------------------------------------------------------------------
+# region Data accessors
 
 def get_layer_entries(mesh: str, frame_time: int) -> list[tuple[int, str, bool, bool]]:
     """Return every layer belonging to *frame_time*, display-ordered.
@@ -116,10 +119,11 @@ def get_layer_frame_time(mesh: str, layer_index: int) -> int | None:
     info = data["layers"].get(str(layer_index))
     return int(info["frame_time"]) if info else None
 
+# endregion
 
-# ---------------------------------------------------------------------------
-# Layer creation
-# ---------------------------------------------------------------------------
+# ==========
+
+# region Layer Creation
 
 def _capture_layer_pose(node: str, new_index: int, frame_time: int) -> None:
     """Duplicate each managed mesh at *frame_time* and wire it up as a new
@@ -236,10 +240,11 @@ def add_layer_to_frame(
 
     return new_index
 
+# endregion
 
-# ---------------------------------------------------------------------------
-# Layer enable/disable (mute)
-# ---------------------------------------------------------------------------
+# ==========
+
+# region Layer Toggle
 
 def set_layer_enabled(mesh: str, layer_index: int, enabled: bool) -> None:
     """Mute or unmute a layer's blendShape weight, keeping its keys intact.
@@ -281,10 +286,11 @@ def set_layer_enabled(mesh: str, layer_index: int, enabled: bool) -> None:
         data["layers"][key]["enabled"] = bool(enabled)
         save_layer_data(node, data)
 
+# endregion
 
-# ---------------------------------------------------------------------------
-# Layer reordering
-# ---------------------------------------------------------------------------
+# ==========
+
+# region Layer Reordering
 
 def reorder_layers(mesh: str, frame_time: int, ordered_layer_indices: list[int]) -> None:
     """Re-number the stacking order of a frame's non-base layers.
@@ -314,10 +320,11 @@ def reorder_layers(mesh: str, frame_time: int, ordered_layer_indices: list[int])
         order += 1
     save_layer_data(node, data)
 
+# endregion
 
-# ---------------------------------------------------------------------------
-# Layer rename & delete
-# ---------------------------------------------------------------------------
+# ==========
+
+# region Layer Renaming
 
 def rename_layer(mesh: str, layer_index: int, new_name: str) -> None:
     """Store a custom display name for a single layer.
@@ -383,3 +390,5 @@ def delete_layer(mesh: str, layer_index: int) -> None:
             data["layers"][promote_key]["is_base"] = True
 
     save_layer_data(node, data)
+
+# endregion

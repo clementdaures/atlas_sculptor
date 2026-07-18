@@ -6,17 +6,26 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
 # atlas_sculptor/core/models/...
 from atlas_sculptor.core.models.layers import get_layer_frame_time
 
 # atlas_sculptor/core/...
-from atlas_sculptor.core.config import load_layer_data, save_layer_data
-from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
+from atlas_sculptor.core.models.config import load_layer_data, save_layer_data
+from atlas_sculptor.core.scene.node import find_shot_sculpt_node_for_mesh
 
+#endregion
+
+# ==========
+
+# region Animation Logic
 
 def update_layer_animation(
     mesh: str,
@@ -96,3 +105,5 @@ def update_layer_animation(
             "key_type": key_type,
         })
         save_layer_data(node, data)
+
+#endregion

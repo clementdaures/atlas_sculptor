@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Core logic for the Atlas Shot Sculptor tool.
+Every function in this module was split out into the focused submodules
+under :mod:`atlas_sculptor.core.scene`, :mod:`atlas_sculptor.core.models`,
+and :mod:`atlas_sculptor.core.states` (see that split for the current,
+maintained implementation). Nothing in this package imports this module.
 
-All Maya operations live here. This module has zero UI dependencies and can
-be imported and unit-tested without a running Qt application.
+This file is not part of the public API, is not exercised by any tests,
+and should not be imported by new code. It is retained here purely as a
+historical reference for the refactor and will be removed in a future
+cleanup pass once the split modules have been in production for a full
+shot cycle.
 
 Author: Clement Daures
 Website: clementdaures.com

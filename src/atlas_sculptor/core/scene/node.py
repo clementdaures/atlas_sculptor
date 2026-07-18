@@ -11,14 +11,23 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
 # atlas_sculptor/core/...
-from atlas_sculptor.core.config import ensure_layer_data_attr
-from atlas_sculptor.core.selection import get_selected_meshes, restore_selection
+from atlas_sculptor.core.models.config import ensure_layer_data_attr
+from atlas_sculptor.core.scene.selection import get_selected_meshes, restore_selection
 
+# endregion
+
+# ==========
+
+# region Node Logic
 
 def find_shot_sculpt_node_for_mesh(mesh: str) -> str | None:
     """Find the AtlasShotSculptor node that manages *mesh*, if any.
@@ -219,3 +228,5 @@ def delete_all_shot_sculptor_nodes(delete_blendshapes: bool = True) -> int:
             _delete_node(node, delete_blendshapes)
 
     return len(nodes)
+
+# endregion

@@ -11,15 +11,24 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
 # atlas_sculptor/core/...
-from atlas_sculptor.core.config import load_layer_data
+from atlas_sculptor.core.models.config import load_layer_data
 from atlas_sculptor.core.models.layers import add_layer_to_frame, delete_layer, get_layer_entries
-from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
+from atlas_sculptor.core.scene.node import find_shot_sculpt_node_for_mesh
 
+# endregion
+
+# ==========
+
+# region Frames Logic
 
 def get_frame_entries(mesh: str) -> list[tuple[int, str]]:
     """Return every distinct timeline frame that has at least one layer,
@@ -94,3 +103,5 @@ def delete_frame(mesh: str, frame_time: int) -> None:
     """
     for layer_index, _name, _enabled, _is_base in get_layer_entries(mesh, frame_time):
         delete_layer(mesh, layer_index)
+
+# endregion

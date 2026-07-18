@@ -6,10 +6,19 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
+# endregion
+
+# ==========
+
+# region Selection Logic
 
 def get_selected_meshes() -> list[str]:
     """Return selected transform nodes that own at least one polygon mesh shape.
@@ -41,3 +50,5 @@ def restore_selection(original: list[str]) -> None:
         cmds.select(original, replace=True)
     else:
         cmds.select(clear=True)
+
+# endregion

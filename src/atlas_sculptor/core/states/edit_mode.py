@@ -6,15 +6,23 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
 # atlas_sculptor/core/...
-
 from atlas_sculptor.core.models.layers import get_layer_frame_time
-from atlas_sculptor.core.node import find_shot_sculpt_node_for_mesh
+from atlas_sculptor.core.scene.node import find_shot_sculpt_node_for_mesh
 
+# endregion
+
+# ==========
+
+# region Edit Mode Logic
 
 def enter_edit_mode(mesh: str, layer_index: int) -> None:
     """Put Maya into sculpt-target edit mode for the given layer.
@@ -90,3 +98,5 @@ def exit_edit_mode(mesh: str, layer_index: int) -> None:
     bs_list = cmds.listConnections(f"{node}.blendShapes", source=True, destination=False) or []
     for bs in bs_list:
         cmds.sculptTarget(bs, edit=True, target=-1)
+
+# endregion
