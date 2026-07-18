@@ -11,14 +11,24 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# pyside modules
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QCheckBox, QPushButton,
 )
 
+# atlas_sculptor/ui/...
 from atlas_sculptor.ui.resources import stylesheet
 
+# endregion
+
+# ==========
+
+# region Delete Dialog
 
 class DeleteNodeDialog(QDialog):
     """Modal dialog: confirm node deletion and choose whether to also
@@ -85,3 +95,5 @@ class DeleteNodeDialog(QDialog):
         if result != QDialog.Accepted:
             return None
         return dlg.delete_blendshapes()
+
+# endregion

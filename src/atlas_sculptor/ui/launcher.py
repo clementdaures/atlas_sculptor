@@ -5,10 +5,21 @@ Dialog UI for the Atlas Shot Sculptor tool.
 Author: Clement Daures
 Website: clementdaures.com
 """
+
+# region Imports & Config
+
+# pyside modules
 from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import QDoubleValidator
 
-from atlas_sculptor.ui.window import AtlasShotSculptorUi
+# atlas_sculptor/ui/...
+from atlas_sculptor.ui.views.main_window import AtlasShotSculptorUi
+
+# endregion
+
+# ==========
+
+# region Launcher UI Logic
 
 def _delete_existing(object_name: str):
     """
@@ -102,3 +113,5 @@ def show():
         print(f"Error in show(): {e}")
         traceback.print_exc()
         return None
+
+# endregion

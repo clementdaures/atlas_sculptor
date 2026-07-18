@@ -11,12 +11,23 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# dcc import
 import maya.cmds as cmds
 
-from atlas_sculptor.core import animation, edit_mode, layers
+# atlas_sculptor/core/...
+from atlas_sculptor.core.models import animation, layers
+from atlas_sculptor.core.states import edit_mode
 
+# endregion
+
+# ==========
+
+# region Edit Controller UI
 
 class EditControllerMixin:
     """Mixin providing sculpt edit-mode entry/exit for ``AtlasShotSculptorUi``.
@@ -115,3 +126,5 @@ class EditControllerMixin:
             self._set_status(f"Finished editing layer {layer_index}")
         else:
             self._enter_edit_for(layer_index)
+
+# endregion

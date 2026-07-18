@@ -6,12 +6,23 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# pyside modules
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit, QCheckBox, QToolButton
 from PySide6.QtCore import Signal
 
+# atlas_sculptor/ui/...
 from atlas_sculptor.ui.resources import stylesheet
+
+# endregion
+
+# ==========
+
+# region Editable Label
 
 class EditableLabel(QWidget):
     """A label that turns into an inline QLineEdit on double-click."""
@@ -59,6 +70,11 @@ class EditableLabel(QWidget):
             self._label.setText(new_text)
             self.renamed.emit(new_text)
 
+# endregion
+
+# ==========
+
+# region Layer Row
 
 class LayerRowWidget(QWidget):
     """One row in the layer list: mute toggle, editable name, up/down
@@ -132,3 +148,5 @@ class LayerRowWidget(QWidget):
         self._edit_btn.setStyleSheet(stylesheet.edit_toggle_button_style())
         self._edit_btn.clicked.connect(self.edit_clicked.emit)
         row.addWidget(self._edit_btn)
+
+# endregion

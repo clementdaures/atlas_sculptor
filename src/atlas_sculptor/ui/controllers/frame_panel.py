@@ -10,19 +10,31 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
-from __future__ import annotations
+# region Imports & Config
 
+# python modules
+from __future__ import annotations
 import functools
 
-import maya.cmds as cmds
+# pyside modules
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QListWidgetItem
 
-from atlas_sculptor.core import frames
+# import dcc
+import maya.cmds as cmds
+
+# atlas_sculptor/core/...
+from atlas_sculptor.core.scene import frames
 from atlas_sculptor.core.models import layers
 
-from atlas_sculptor.ui.widgets import LayerRowWidget
+# atlas_sculptor/ui/...
+from atlas_sculptor.ui.widgets.layer_row import LayerRowWidget
 
+# endregion
+
+# ==========
+
+# region Frame Panel UI
 
 class FramePanelMixin:
     """Mixin providing frame/layer list population and editing behaviour
@@ -36,9 +48,7 @@ class FramePanelMixin:
     ``_editing_layer_index``.
     """
 
-
-    # Frame list
-
+    # region Frame List
 
     def _refresh_frame_list(self) -> None:
         """Repopulate the frame list for ``self._current_mesh``.
@@ -131,9 +141,11 @@ class FramePanelMixin:
         self._refresh_frame_list()
         self._set_status("Frame deleted")
 
+    # endregion
 
-    # Layer list
+    # ==========
 
+    # region Layer list
 
     def _refresh_layer_list(self) -> None:
         """Repopulate the layer list for the currently selected frame."""
@@ -258,3 +270,7 @@ class FramePanelMixin:
         self._toggle_edit_for(layer_index)
         self._refresh_layer_list()
         self._select_layer_row(layer_index)
+
+    # endregion
+
+# endregion

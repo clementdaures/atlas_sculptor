@@ -13,8 +13,12 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# pyside modules
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QSpinBox, QLineEdit, QComboBox,
@@ -22,20 +26,24 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QAction
 
+# dcc import
 import maya.cmds as cmds
 
-from atlas_sculptor.core import node
+# atlas_sculptor/core/...
+from atlas_sculptor.core.scene import node
 
-from atlas_sculptor.ui.resources import stylesheet
-from atlas_sculptor.ui.delete_dialog import DeleteNodeDialog
-from atlas_sculptor.ui.edit_controller import EditControllerMixin
-from atlas_sculptor.ui.frame_panel import FramePanelMixin
-from atlas_sculptor.ui.selection_sync import SelectionSyncMixin
+# atlas_sculptor/ui/...
+from atlas_sculptor.ui.resources import stylesheet, constants
+from atlas_sculptor.ui.views.dlg_delete_node import DeleteNodeDialog
+from atlas_sculptor.ui.controllers.edit_controller import EditControllerMixin
+from atlas_sculptor.ui.controllers.frame_panel import FramePanelMixin
+from atlas_sculptor.ui.controllers.selection_sync import SelectionSyncMixin
 
+# endregion
 
+# ==========
 
-# Main window
-
+# region Main Window
 
 class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMixin, QMainWindow):
     """Main window for the Atlas Shot Sculptor tool.
@@ -57,7 +65,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
     """
 
 
-    # Construction
+    # region Construction
 
 
     def __init__(self, parent: QWidget | None = None) -> None:
@@ -75,9 +83,9 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         self._selection_script_job: int | None = None
 
         # --- Window chrome ---
-        self.setWindowTitle("Atlas Sculptor 1.0.0 - Maya")
+        self.setWindowTitle(f"Atlas Sculptor {constants.VERSION} - Maya")
         self.setMinimumWidth(340)
-        self.setStyleSheet(styles.main_stylesheet())
+        self.setStyleSheet(stylesheet.main_stylesheet())
 
         # --- Build layout ---
         central = QWidget()
@@ -99,8 +107,11 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         self._register_selection_script_job()
         self._on_selection_changed()
 
+    # endregion
 
-    # Layout builders
+    # ==========
+
+    # region Layout Builders
 
 
     def _build_menubar(self, layout: QVBoxLayout) -> None:
@@ -137,7 +148,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         page_layout.setSpacing(8)
 
         group = QGroupBox("Initialize")
-        group.setStyleSheet(styles.groupbox_style())
+        group.setStyleSheet(stylesheet.groupbox_style())
         inner = QVBoxLayout(group)
 
         self._init_hint_label = QLabel("Select a skinned mesh to begin.")
@@ -146,7 +157,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         inner.addWidget(self._init_hint_label)
 
         create_group_btn = QPushButton("Initialize Blendshape")
-        create_group_btn.setStyleSheet(styles.green_action_button_style())
+        create_group_btn.setStyleSheet(stylesheet.green_action_button_style())
         create_group_btn.clicked.connect(self._on_create_group)
         inner.addWidget(create_group_btn)
 
@@ -166,13 +177,13 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         frame_btn_row.setSpacing(4)
 
         self._create_frame_btn = QPushButton("Create Sculpt Frame")
-        self._create_frame_btn.setStyleSheet(styles.green_action_button_style())
+        self._create_frame_btn.setStyleSheet(stylesheet.green_action_button_style())
         self._create_frame_btn.clicked.connect(self._on_create_frame_clicked)
         frame_btn_row.addWidget(self._create_frame_btn)
 
         self._delete_frame_btn = QPushButton("Delete Sculpt Frame")
         self._delete_frame_btn.setEnabled(False)
-        self._delete_frame_btn.setStyleSheet(styles.red_action_button_style())
+        self._delete_frame_btn.setStyleSheet(stylesheet.red_action_button_style())
         self._delete_frame_btn.clicked.connect(self._on_delete_frame_clicked)
         frame_btn_row.addWidget(self._delete_frame_btn)
 
@@ -180,7 +191,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
 
         self._frame_list = QListWidget()
         self._frame_list.setMinimumHeight(90)
-        self._frame_list.setStyleSheet(styles.listwidget_style())
+        self._frame_list.setStyleSheet(stylesheet.listwidget_style())
         self._frame_list.currentRowChanged.connect(self._on_frame_row_changed)
         page_layout.addWidget(self._frame_list)
 
@@ -199,7 +210,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
 
         self._layer_list = QListWidget()
         self._layer_list.setMinimumHeight(130)
-        self._layer_list.setStyleSheet(styles.listwidget_style())
+        self._layer_list.setStyleSheet(stylesheet.listwidget_style())
         page_layout.addWidget(self._layer_list)
 
         self._build_animation_settings(page_layout)
@@ -209,7 +220,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
 
     def _build_animation_settings(self, layout: QVBoxLayout) -> None:
         self._anim_group = QGroupBox("Animation Settings")
-        self._anim_group.setStyleSheet(styles.groupbox_style())
+        self._anim_group.setStyleSheet(stylesheet.groupbox_style())
         self._anim_group.setEnabled(False)
         inner = QVBoxLayout(self._anim_group)
 
@@ -232,7 +243,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
             spin.setValue(val)
             spin.setMinimum(0)
             spin.setMaximum(999)
-            spin.setStyleSheet(styles.spinbox_style())
+            spin.setStyleSheet(stylesheet.spinbox_style())
             spin.valueChanged.connect(self._on_easing_changed)
             spinbox_row.addWidget(spin)
         inner.addLayout(spinbox_row)
@@ -243,7 +254,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         key_lbl.setStyleSheet("color: #cccccc; font-size: 10px;")
         self._key_type_combo = QComboBox()
         self._key_type_combo.addItems(["linear", "spline", "stepped"])
-        self._key_type_combo.setStyleSheet(styles.combobox_style())
+        self._key_type_combo.setStyleSheet(stylesheet.combobox_style())
         self._key_type_combo.currentTextChanged.connect(self._on_easing_changed)
         key_row.addWidget(key_lbl)
         key_row.addWidget(self._key_type_combo)
@@ -256,9 +267,11 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         self._status_label.setStyleSheet("QLabel { color: #888888; padding: 5px; font-size: 10px; }")
         layout.addWidget(self._status_label)
 
+    # endregion
 
-    # Shared helpers
+    # ==========
 
+    # region Shared Helpers
 
     def _set_status(self, text: str) -> None:
         self._status_label.setText(text)
@@ -284,19 +297,17 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         self._maya_selection_set_by_us = None
         self._on_selection_changed()
 
+    # endregion
 
-    # Slots -- group / node level
+    # ==========
 
+    # region Slots
 
     def _on_create_group(self) -> None:
         """Slot: Initialize Blendshape button."""
         with self._suppressed_selection_sync():
             node.create_shot_sculpt_node()
         self._force_selection_resync()
-
-
-    # Slots -- Tools menu (node deletion)
-
 
     def _on_delete_node_for_selection(self) -> None:
         """Menu: Tools > Delete Custom Node for Selection.
@@ -340,3 +351,7 @@ class AtlasShotSculptorUi(SelectionSyncMixin, EditControllerMixin, FramePanelMix
         self._force_selection_resync()
         if deleted_count:
             self._set_status(f"Deleted {deleted_count} Shot Sculptor node(s).")
+
+    # endregion
+
+# endregion

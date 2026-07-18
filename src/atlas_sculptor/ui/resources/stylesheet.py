@@ -6,8 +6,16 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
+# region Imports & Config
+
+# python modules
 from __future__ import annotations
 
+# endregion
+
+# ==========
+
+# region Stylesheet
 
 def main_stylesheet() -> str:
     """Stylesheet applied to the whole main window."""
@@ -135,3 +143,5 @@ def edit_toggle_button_style() -> str:
         QToolButton { background-color: #404040; border: 1px solid #262626; border-radius: 3px; }
         QToolButton:checked { background-color: #7a53cf; border: 1px solid #a37bf0; color: white; }
     """
+
+# endregion

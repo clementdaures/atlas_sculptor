@@ -10,16 +10,24 @@ Author: Clement Daures
 Website: clementdaures.com
 """
 
-from __future__ import annotations
+# region Imports & Config
 
+# python modules
+from __future__ import annotations
 from contextlib import contextmanager
 
+# import dcc
 import maya.cmds as cmds
 
+# atlas_sculptor/ui/...
+from atlas_sculptor.ui.resources.constants import PAGE_FRAME_DISPLAYER, PAGE_INITIALIZE
+from atlas_sculptor.core.scene import node, selection
 
-from atlas_sculptor.ui.constants import PAGE_FRAME_DISPLAYER, PAGE_INITIALIZE
-from atlas_sculptor.core import node, selection
+# endregion
 
+# ==========
+
+# region Selection Sync UI
 
 class SelectionSyncMixin:
     """Mixin providing Maya-selection-changed tracking for ``AtlasShotSculptorUi``.
@@ -130,3 +138,5 @@ class SelectionSyncMixin:
                 self._init_hint_label.setText(f'"{meshes[0]}" has no Atlas Sculptor node yet.')
             else:
                 self._init_hint_label.setText("Selected meshes have no Atlas Sculptor node yet.")
+
+# endregion
