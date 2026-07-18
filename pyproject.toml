@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas-sculptor"
+version = "1.0.0"
+description = "Non-destructive viewport sculpt-layering and shot-finaling tool for the Andhakara pipeline (Maya 2025 / PySide6)."
+readme = "README.md"
+license = { text = "GPL-3.0-only" }
+authors = [{ name = "Clement Daures", email = "support@clementdaures.com" }]
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+]
+
+# PySide6 and maya.cmds are NOT listed here on purpose: both are only
+# available inside Maya's own bundled Python interpreter. `core/` is
+# tested with a mocked `maya.cmds` (see tests/conftest.py) rather than
+# a pip-installed one. See docs/getting_started.md.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "black>=24",
+]
+
+[project.urls]
+Homepage = "https://github.com/clementdaures/atlas_sculptor"
+Documentation = "docs/index.md"
+Changelog = "CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = [
+    "E501", # line length is handled by black
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

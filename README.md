@@ -59,5 +59,30 @@ You are free to use, modify, and distribute this software under the terms of the
 
 See the full license text here: https://www.gnu.org/licenses/gpl-3.0.html
 
+## Project Layout
+```
+atlas_sculptor/
+├── docs/                 architecture & module-by-module docs, start at docs/index.md
+├── src/atlas_sculptor/
+│   ├── core/             Maya-facing logic, zero UI dependencies
+│   │   ├── scene/        node / selection / frame operations
+│   │   ├── models/       layer & animation data + storage
+│   │   ├── states/       sculpt edit-mode state machine
+│   │   └── legacy/       superseded prototype, reference only
+│   └── ui/                PySide6 front end
+│       ├── views/        top-level windows & dialogs
+│       ├── controllers/  mixins implementing window behaviour
+│       ├── widgets/      reusable custom Qt widgets
+│       └── resources/    stylesheet + constants
+└── tests/                 unit tests for core/ (maya.cmds mocked)
+```
+See [`docs/index.md`](docs/index.md) for the full architecture writeup.
+
+## Contributing
+Bug reports, feature requests, and PRs are welcome — see
+[`CONTRIBUTING.md`](CONTRIBUTING.md) for branch/commit conventions and
+where new code should live
+
 ## Notes
-Please ensure proper environment setup (Python 3.11, PySide6, Maya 2025) before running the tool initialization scripts within the Andhakara asset pipeline.
+Please ensure proper environment setup (Python 3.11, PySide6, Maya 2025) before running the tool initialization scripts within the Andhakara asset pipeline. See [`docs/getting_started.md`](docs/getting_started.md) for the exact steps, including how to run the (Maya-free) test suite.
+
