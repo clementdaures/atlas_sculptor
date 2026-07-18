@@ -84,5 +84,5 @@ Bug reports, feature requests, and PRs are welcome — see
 where new code should live
 
 ## Notes
-Please ensure proper environment setup (Python 3.11, PySide6, Maya 2025) before running the tool initialization scripts within the Andhakara asset pipeline. See [`docs/getting_started.md`](docs/getting_started.md) for the exact steps, including how to run the (Maya-free) test suite.
+Please ensure proper environment setup (Python 3.11, PySide6, Maya 2025) before running the tool initialization scripts within the Andhakara asset pipeline. See [`docs/getting_started.md`](docs/getting_started.md) for the exact steps, including how to run the (Maya-free) test suite, or [`docs/maya_setup.md`](docs/maya_setup.md) for the quicker copy-into-Maya's-`scripts`-folder route. Once it's loaded, see [`docs/user_guide.md`](docs/user_guide.md) for how to use it.
 

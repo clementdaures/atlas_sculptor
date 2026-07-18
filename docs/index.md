@@ -12,14 +12,23 @@ pitch, the film, and the team, see the [root README](../README.md).
 
 - **[Getting Started](getting_started.md)** — environment setup, loading
   the tool in Maya, and running the test suite.
+- **[Maya Setup](maya_setup.md)** — the quickest way in: copy the
+  package into Maya's `scripts` folder and launch it, no `PYTHONPATH`
+  editing required.
+- **[User Guide](user_guide.md)** — for artists: initializing a mesh,
+  creating sculpt frames, layers, and blending a fix into the timeline.
 - **[Architecture](architecture.md)** — how `core` and `ui` are split,
   and the rule that keeps them decoupled.
 - **[Core package](core.md)** — `scene`, `models`, `states`: what each
   subpackage owns and the data flow between them.
 - **[UI package](ui.md)** — `views`, `controllers`, `widgets`,
   `resources`: how the Qt front end is assembled.
+- **[Developer Guide](developer_guide.md)** — a deeper dive into the
+  trickier logic: index allocation, layer ordering/base-layer pinning,
+  the animation-curve math, and the selection-sync suppression trick.
 - **[Contributing](../CONTRIBUTING.md)** — branch naming, commit style,
-  and what a PR needs before review.
+  and what a PR needs before review, including the `# region` and
+  import-comment conventions used throughout the codebase.
 
 ## Project layout
 

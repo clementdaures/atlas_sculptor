@@ -18,6 +18,13 @@ from atlas_sculptor.ui import launcher
 launcher.show()
 ```
 
+This `PYTHONPATH` route is the one to use for active development, since
+it points Maya straight at the repo -- no re-copying after every change.
+If you just want the tool running with the least setup (e.g. as an
+artist, not actively editing the code), see
+[Maya Setup](maya_setup.md) for the copy-into-`scripts`-folder
+alternative instead; both end up doing the same import.
+
 ## Dev environment (linting / tests, no Maya required)
 
 ```bash
@@ -56,8 +63,14 @@ Both run in CI (`.github/workflows/ci.yml`) on every pull request.
 
 ## Where to go next
 
+- [Maya Setup](maya_setup.md) for the copy-to-`scripts` alternative to
+  the `PYTHONPATH` method above.
+- [User Guide](user_guide.md) for the artist-facing workflow once the
+  tool is loaded.
 - [Architecture](architecture.md) for the `core`/`ui` split and the rule
   that keeps them decoupled.
-- [`core/`](core.md) and [`ui/`](ui.md) for a module-by-module map.
+- [`core/`](core.md) and [`ui/`](ui.md) for a module-by-module map, and
+  the [Developer Guide](developer_guide.md) for a deeper dive into the
+  trickier logic.
 - [Contributing](../CONTRIBUTING.md) before opening a PR.
 
